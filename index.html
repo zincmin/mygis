@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GIS高级程序设计</title>
+    <meta http-equiv="content-type" content="text/html; charset=GB2312">
+    <style>
+        html, body {
+            border: 0;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .main {
+            width: 100%;
+            height: 100%;
+            text-align: left;
+        }
+
+        .main_left {
+            width: 180px;
+            background-color:#99CCFF;
+        }
+
+        .main_right {
+            height: 100%;
+            background-color: #FFF;
+        }
+        .picBox {
+            width: 9px;
+            background: #337ABB url(js/images/left.gif) no-repeat center center;
+        }
+
+        .main_left, .picBox {
+            float: left;
+            height: 100%;
+            _margin-right: -3px;
+        }
+
+        #map {
+            height: 100%;
+        }
+
+        button {
+            width: 80px;
+            height: 30px;
+        }
+
+       
+        #titlebar {
+            background: #337ABB url(js/images/titlebg.png) repeat-x center center;
+            background-attachment: scroll;
+            text-align:center;
+            font-family: 宋体;
+            font-size:larger;
+            color: #FFFFFF;
+        }
+
+    </style>
+    <script src="js/min.js"></script>
+    <link href="css/leaflet.css" rel="stylesheet" />
+    <script src="js/leaflet-src.js"></script>
+    <script src="js/proj4-compressed.js"></script>
+    <script src="js/proj4leaflet.js"></script>
+    <script src="js/OSMBuildings-Leaflet.debug.js"></script>
+    <script src="js/leaflet.ChineseTmsProviders.js"></script>
+    <script src="js/zDialog.js"></script>
+    <script src="js/zDrag.js"></script>
+    <script src="js/dist/leaflet.contextmenu.js"></script>
+    <link href="js/dist/leaflet.contextmenu.css" rel="stylesheet" />
+    <link href="js/dist/leaflet.css" rel="stylesheet" />
+	<script src="js/Leaflet.draw.js"></script>
+    <link href="js/dist/leaflet.draw.css" rel="stylesheet" />
+    <script src="js/Toolbar.js"></script>
+	<script src="js/Tooltip.js"></script>
+	<script src="js/ext/GeometryUtil.js"></script>
+	<script src="js/ext/LatLngUtil.js"></script>
+	<script src="js/ext/LineUtil.Intersect.js"></script>
+	<script src="js/ext/Polygon.Intersect.js"></script>
+	<script src="js/ext/Polyline.Intersect.js"></script>
+	<script src="js/draw/DrawToolbar.js"></script>
+	<script src="js/draw/handler/Draw.Feature.js"></script>
+	<script src="js/draw/handler/Draw.SimpleShape.js"></script>
+	<script src="js/draw/handler/Draw.Polyline.js"></script>
+	<script src="js/draw/handler/Draw.Circle.js"></script>
+	<script src="js/draw/handler/Draw.Marker.js"></script>
+	<script src="js/draw/handler/Draw.Polygon.js"></script>
+	<script src="js/draw/handler/Draw.Rectangle.js"></script>
+	<script src="js/edit/EditToolbar.js"></script>
+	<script src="js/edit/handler/EditToolbar.Edit.js"></script>
+	<script src="js/edit/handler/EditToolbar.Delete.js"></script>
+	<script src="js/Control.Draw.js"></script>
+	<script src="js/edit/handler/Edit.Poly.js"></script>
+	<script src="js/edit/handler/Edit.SimpleShape.js"></script>
+	<script src="js/edit/handler/Edit.Circle.js"></script>
+	<script src="js/edit/handler/Edit.Rectangle.js"></script>
+	<script src="js/edit/handler/Edit.Marker.js"></script>
+    <script src="js/leaflet.measurecontrol.js"></script>
+    <link href="js/leaflet.measurecontrol.css" rel="stylesheet" />
+    <script src="js/Leaflet.NavBar.js"></script>
+    <link href="js/Leaflet.NavBar.css" rel="stylesheet" />
+    <script src="js/lib/jquery/jquery-1.9.1.js"></script>
+    <script src="js/lib/jquery/jquery-ui-1.10.3.custom.min.js"></script>
+    <link href="js/lib/jquery/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+    <script src="js/lib/opacity/Control.Opacity.js"></script>
+    <link href="js/lib/opacity/Control.Opacity.css" rel="stylesheet" />
+    <link href="js/leaflet-compass.src.css" rel="stylesheet" />
+    <script src="js/leaflet-compass.src.js"></script>
+    <script src="js/L.Control.Locate.js"></script>
+    <link href="js/L.Control.Locate.css" rel="stylesheet" />
+    <script src="js/Jakefile.js"></script>
+    <script src="js/L.Control.ZoomBox.js"></script>
+    <link href="js/L.Control.ZoomBox.css" rel="stylesheet" />
+    <script src="js/heatcanvas-leaflet.js"></script>
+    <script src="js/heatcanvas.js"></script>
+    <link href="js/leaflet.fullscreen.css" rel="stylesheet" />
+    <script src="js/Leaflet.fullscreen.min.js"></script>
+    <script src="js/Control.MiniMap.js"></script>
+    <link href="js/Control.MiniMap.css" rel="stylesheet" />
+    <script src="js/easy-button.js"></script>
+    <script src="js/leaflet-routing-machine.js"></script>
+    <link href="js/leaflet-routing-machine.css" rel="stylesheet" />
+    <link href="js/farbtastic.css" rel="stylesheet" />
+    <script src="js/farbtastic.js"></script>
+    <script src="js/L.Graticule.js"></script>
+    <script src="js/leaflet.markercluster-src.js"></script>
+    <link href="js/MarkerCluster.css" rel="stylesheet" />
+    <link href="js/MarkerCluster.Default.css" rel="stylesheet" />
+</head>
+
+<body onload="loadcomplete()">
+    <div id="titlebar" style="width:100%; height:26px;">
+        <span>GIS高级程序设计-(张敏,童辉,万月,张闺臣)</span>
+    </div>
+    <div class="main_left" id="frmTitle" style="display:none;" name="fmTitle" > 
+        <div id="picker" style="margin-left:20px;margin-top:10px"></div>
+        <br />
+        <div class="form-item"><label for="color1">墙面颜色:</label><input type="text" id="wallColor" name="color1" class="colorwell" value="#00FFFF" style="width:70px"/></div>
+        <div class="form-item"><label for="color2">顶部颜色:</label><input type="text" id="roofColor" name="color2" class="colorwell" value="#FFCC00" style="width:70px"/></div>
+        <button style="width:100%" onclick="setStyle(this, '')">三维渲染</button>
+          <br>
+         <br>
+        <label><input type="checkbox" onclick="setStyle(this, 'shadows')" checked>显示阴影</label>
+            <br>
+        <br>
+        日期：<input id="osmdate" type="range" min="1" max="365" step="1" onchange="onDateChange()"/>
+        时间：<input id="osmtime" type="range" min="0" max="23" step="1" onchange="onTimeChange()"/>
+        <label id="losmdatetime"></label>
+    </div>
+    <div class="picBox" onclick="switchSysBar()" id="switchPoint" ></div>
+    <div class="main_right">
+    
+    <div id="map"></div>
+   </div>
+
+    <script>
+        $(document).ready(function () {
+            var f = $.farbtastic('#picker');
+            var p = $('#picker').css('opacity', 1);
+            var selected;
+            $('.colorwell')
+              .each(function () { f.linkTo(this); $(this).css('opacity', 0.75); })
+              .focus(function () {
+                  if (selected) {
+                      $(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+                  }
+                  f.linkTo(this);
+                  p.css('opacity', 1);
+                  $(selected = this).css('opacity', 1).addClass('colorwell-selected');
+              });
+        });
+
+        lt5 = L.tileLayer("http://t0.tianditu.cn/vec_w/wmts?" +
+           "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+           "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+               minZoom: 4,
+               maxZoom: 18
+           });
+
+        ter = L.tileLayer("http://t0.tianditu.cn/ter_w/wmts?" +
+                "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ter&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+                "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+                    minZoom: 4,
+                    maxZoom: 18
+                });
+
+        img = L.tileLayer("http://t0.tianditu.cn/img_w/wmts?" +
+                "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+                "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+                    minZoom: 4,
+                    maxZoom: 18
+                });
+
+        lt2 = L.tileLayer("http://t0.tianditu.com/cva_w/wmts?" +
+                "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+                "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+                    minZoom: 4,
+                    maxZoom: 18
+                });
+
+        //var normalm = L.tileLayer.chinaProvider('GaoDe.Normal.Map', { maxZoom: 18, minZoom: 5 });
+        //var imgm = L.tileLayer.chinaProvider('GaoDe.Satellite.Map', { maxZoom: 18, minZoom: 5 });
+        //var imga = L.tileLayer.chinaProvider('GaoDe.Satellite.Annotion', { maxZoom: 18, minZoom: 5 });
+        // var normal = L.layerGroup([normalm]),
+        //image = L.layerGroup([imgm, imga]);
+        var map = L.map("map", {
+            center: [30.532, 114.358749],
+            fullscreenControl: true,
+            zoom: 12,
+            layers: [lt5],
+            zoomControl: false,
+            contextmenu: true,
+            contextmenuWidth: 140,
+            contextmenuItems: [{
+                text: '当前坐标',
+                callback: showCoordinates
+            }, {
+                text: '居中显示',
+                callback: centerMap
+            }, '-', {
+                text: '放大',
+                icon: 'js/images/zoom-in.png',
+                callback: zoomIn
+            }, {
+                text: '缩小',
+                icon: 'js/images/zoom-out.png',
+                callback: zoomOut
+            }]
+        });
+
+
+        ///热点图
+        var heatmap = new
+                 L.TileLayer.HeatCanvas("Heat Canvas", map, {}, {
+                     'step': 0.5,
+                     'degree': HeatCanvas.LINEAR,
+                     'opacity': 0.7
+                 });
+        heatmap.pushData(30.532,114.358749,  102);
+        //map.addLayer(heatmap);
+
+        //显示格网
+        L.graticule({
+            style: {
+                color: '#777',
+                weight: 1,
+                opacity: 0.5
+            }
+        }).addTo(map);
+
+        //右键菜单
+        function showCoordinates(e) {
+            alert(e.latlng);
+        }
+
+        function centerMap(e) {
+            map.panTo(e.latlng);
+        }
+
+        function zoomIn(e) {
+            map.zoomIn();
+        }
+
+        function zoomOut(e) {
+            map.zoomOut();
+        }
+
+        var is3dEdit = false;
+        //三维模型
+        var osmb = new OSMBuildings(map)
+            .date(new Date(2014, 5, 15, 17, 30))
+            .load();
+            //.click(function (id) {
+            //    alert('id:' + id.feature + ' lat:' + id.lat + ' lon:' + id.lon);
+            //} );
+
+        /*var baseLayers = {
+            "地图": normal,
+            "影像": image,
+        }*/
+
+
+        var baseLayers = {
+            "地图": lt5,
+            "影像": img
+        };
+
+        var overlays = {
+            "三维模型": osmb,
+            "地图标注": lt2,
+            //"热点图": heatmap,
+            "地形图": ter
+        };
+        map.addLayer(lt2);
+
+        var osmHeight = 10;
+        var osmColor = '#ffcc00';
+        map.on('draw:drawstart', function (e) {
+            var type = e.layerType,
+				layer = e.layer;
+            if (is3dEdit) {
+                if (type == 'polyline') {
+                    return;
+                }
+                else if (type === 'marker') {
+                    return;
+                }
+                var diag = new Dialog();
+                diag.Title = "高程";
+                diag.URL = "index.html";
+                diag.OKEvent = function () {
+                    osmHeight = diag.innerFrame.contentWindow.document.getElementById('h').value;
+                    diag.close();
+                };
+                diag.show();
+                var doc = diag.innerFrame.contentWindow.document;
+                doc.open();
+                doc.write('<html><body>高程：<input id="h" type="text" value="' + osmHeight + '"/></body></html>');
+                doc.close();
+            }
+        });
+
+
+        drawnItems = L.featureGroup().addTo(map);
+        map.on('draw:created', function (e) {
+            var type = e.layerType,
+				layer = e.layer;
+            if (type == 'polyline') {
+                drawnItems.addLayer(layer);
+            }
+            else if (type == 'marker') {
+                drawnItems.addLayer(layer);
+            }
+            else if (is3dEdit) {
+                var feature = e.layer.toGeoJSON();
+                feature.properties = { color: osmColor, height: osmHeight, tags: 'test' };
+                var oldgeoJson = osmb.get();
+                if (oldgeoJson == null) {
+                    oldgeoJson = { type: 'FeatureCollection', features: [feature] };
+                }
+                else {
+                    oldgeoJson.features.push(feature);
+                }
+                osmb.set(oldgeoJson);
+            }
+            else {
+                drawnItems.addLayer(layer);
+            }
+        });
+
+        //添加导航控件
+        L.control.navbar().addTo(map);
+
+        L.Control
+        L.control.layers(baseLayers, overlays).addTo(map);
+        //添加放缩控件
+        L.control.zoom({ zoomInTitle: '放大', zoomOutTitle: '缩小' }).addTo(map);
+
+
+
+        //拉框放缩控件
+        var control = L.control.zoomBox({
+            modal: true,  // If false (default), it deactivates after each use.  
+        });
+        map.addControl(control);
+
+        L.easyButton('is3dEdit',
+              function () {
+                  if (is3dEdit)
+                      is3dEdit = false;
+                  else 
+                      is3dEdit = true;
+              },
+             '三维操作'
+         )
+
+
+        var markers = L.markerClusterGroup({
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: false
+        });
+        L.easyButton('poisearsh',
+             function () {
+                 var diag = new Dialog();
+                 diag.Title = "地址查询";
+                 diag.URL = "search.html";
+                 markers.clearLayers();
+                 if (map.hasLayer(markers))
+                     map.removeLayer(markers);
+                 diag.OKEvent = function () {
+                     var poiname = diag.innerFrame.contentWindow.document.getElementById('selected').innerHTML;
+                     var poiinfo = diag.innerFrame.contentWindow.document.getElementById('hidevalue').innerHTML;
+                     if (poiinfo == '0') {
+                         var poiinfo2 = diag.innerFrame.contentWindow.document.getElementById('hidevalue2').innerHTML;
+                         var poiArr = poiinfo2.split("-#-");
+                         for (var i = 0; i < poiArr.length - 1; ++i) {
+                             var poiinfoArr = poiArr[i].split("-*-");
+                             var latlon = new L.LatLng(poiinfoArr[1], poiinfoArr[0]);
+                             var m = L.marker(latlon);
+                             m.bindPopup(poiinfoArr[2] + '<br/>' + poiinfoArr[3]);
+                             markers.addLayer(m);
+                         }
+                         markers.on('clusterclick', function (a) {
+                             a.layer.spiderfy();
+                         });
+                         map.addLayer(markers);
+                     }
+                     else {
+                         var poiinfoArr = poiinfo.split("-*-");
+                         L.marker([poiinfoArr[1], poiinfoArr[0]]).addTo(map).bindPopup(poiinfoArr[2] + '<br/>' + poiinfoArr[3]).openPopup();
+                         var latlon = L.latLng(poiinfoArr[1], poiinfoArr[0]);
+                         map.panTo(latlon);
+                     }
+                     diag.close();
+                 };
+                 diag.show();
+             },
+            '地址查询'
+        );
+
+
+        var routingcontrol = L.Routing.control({
+            waypoints: [
+                L.latLng(30.532, 114.358749),
+                L.latLng(30.542, 114.358769)
+            ],
+            routeWhileDragging: true
+        });
+        var issearchroute = false;
+        L.easyButton('routesearsh',
+          function () {
+              if (!issearchroute) {
+                  map.addControl(routingcontrol);
+                  routingcontrol.show();
+                  routingcontrol.route();
+                  issearchroute = true;
+              }
+              else {
+                  map.removeControl(routingcontrol);
+                  routingcontrol.hide();
+                  issearchroute = false;
+              }
+          },
+            '路线查询'
+        );
+
+        //绘制三维模型控件
+        var osmDrawControl = new L.Control.Draw({
+            draw: { polyline: true, circle: true, marker: true },
+            edit: { featureGroup: drawnItems }
+        });
+        map.addControl(osmDrawControl);
+
+        //添加测量控件
+        L.Control.measureControl().addTo(map);
+
+        //位置共享
+        lc = L.control.locate({
+            follow: true,
+            strings: {
+                title: "我在这里！"
+            }
+        }).addTo(map);
+
+        map.on('startfollowing', function () {
+            map.on('dragstart', lc._stopFollowing, lc);
+        }).on('stopfollowing', function () {
+            map.off('dragstart', lc._stopFollowing, lc);
+        });
+
+        //比例尺
+        //L.control.scale().addTo(map);
+
+        //鹰眼图
+        lt5Copy = L.tileLayer("http://t0.tianditu.cn/vec_w/wmts?" +
+          "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+          "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+              minZoom: 4,
+              maxZoom: 13
+          });
+
+
+        imgCopy = L.tileLayer("http://t0.tianditu.cn/img_w/wmts?" +
+                "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+                "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}", {
+                    minZoom: 4,
+                    maxZoom: 13
+                });
+
+        var baseLayersCopy = {
+            "地图": lt5Copy,
+            "影像": imgCopy
+            };
+
+        var miniMap = new L.Control.MiniMap(lt5Copy, { toggleDisplay: true }).addTo(map);
+
+        map.on('baselayerchange', function (e) {
+            miniMap.changeLayer(baseLayersCopy[e.name]);
+        })
+
+        //指北针
+        //map.addControl(new L.Control.Compass());
+        //透明度
+        var higherOpacity = new L.Control.higherOpacity();
+        higherOpacity.setOpacityLayer(ter);
+        map.addControl(higherOpacity);
+        var lowerOpacity = new L.Control.lowerOpacity();
+        lowerOpacity.setOpacityLayer(ter);
+        map.addControl(lowerOpacity);
+        ter.setOpacity(0.6);
+        //var opacitySlider = new L.Control.opacitySlider();
+        //map.addControl(opacitySlider);
+
+        //opacitySlider.setOpacityLayer(osmb);
+        //osmb.setOpacity(0.5);
+
+        //编辑控件
+        /*drawnItems = L.featureGroup();
+        map.addControl(new L.Control.Draw({
+            edit: { featureGroup: drawnItems }
+        }));*/
+
+        //
+
+
+        //改变颜色
+        var wallColor, roofColor, shadows = true;
+        function setStyle(el, type) {
+            if (type === 'shadows') {
+                shadows = el.checked;
+            }
+            else {
+                wallColor = document.getElementById('wallColor').value;
+                roofColor = document.getElementById('roofColor').value;
+            }
+
+            osmb.style({ wallColor: wallColor, roofColor: roofColor, shadows: shadows });
+
+            var style = [];
+            if (wallColor) {
+                style.push('wallColor:\'' + wallColor + '\'');
+            }
+            if (roofColor) {
+                style.push('roofColor:\'' + roofColor + '\'');
+            }
+            style.push('shadows:' + (shadows ? 'true' : 'false'));
+
+            Code.update({ style: style.join(', ') });
+        }
+
+        //根据时间改变阴影
+        var now,
+        date, time,
+        timeRange, dateRange,
+        datetimeRangeLabel;
+        function changeDate() {
+            var Y = now.getFullYear(),
+              M = now.getMonth(),
+              D = now.getDate(),
+              h = now.getHours(),
+              m = 0;
+
+            var datetime = '' + Y + '年' + (M + 1) + '月' + D + '日' + h + '时';
+            datetimeRangeLabel.value = datetime;
+            datetimeRangeLabel.innerHTML = datetime;
+
+            osmb.date(new Date(Y, M, D, h, m));
+        }
+
+        function onTimeChange() {
+            now.setHours(timeRange.value);
+            now.setMinutes(0);
+            changeDate();
+        }
+
+        function onDateChange() {
+            now.setMonth(0);
+            now.setDate(dateRange.value);
+            changeDate();
+        }
+
+        function pad(v) {
+            return (v < 10 ? '0' : '') + v;
+        }
+
+        function loadcomplete(){
+            timeRange = document.getElementById('osmtime');
+            dateRange = document.getElementById('osmdate');
+            datetimeRangeLabel = document.getElementById('losmdatetime');
+
+            now = new Date;
+            changeDate();
+            // init with day of year
+            var Jan1 = new Date(now.getFullYear(), 0, 1);
+            dateRange.value = Math.ceil((now - Jan1) / 86400000);
+            timeRange.value = now.getHours();
+        };
+
+        var popup;
+        osmb.click(function(e) {
+            popup = L.popup({ maxHeight:200, autoPanPaddingTopLeft:[50,50] })
+              .setLatLng(L.latLng(e.lat, e.lon))
+              .setContent('<b>编号： ' + e.feature + '</b>')
+              .openOn(map);
+
+            var url = 'http://data.osmbuildings.org/0.2/rkc8ywdl/feature/'+ e.feature +'.json';
+            ajax(url, function(json) {
+                var content = '<b>编号： '+ e.feature +'</b>';
+                for (var i = 0; i < json.features.length; i++) {
+                    content += '<br><em>编号：</em> ' + json.features[i].id;
+                    content += '<br>'+ formatJSON(json.features[i].properties.tags);
+                }
+                popup.setContent(content).openOn(map);
+            });
+        });
+
+        function ajax(url, callback) {
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (req.readyState !== 4) {
+                    return;
+                }
+                if (!req.status || req.status < 200 || req.status > 299) {
+                    return;
+                }
+
+                callback(JSON.parse(req.responseText));
+            };
+            req.open('GET', url);
+            req.send(null);
+        }
+
+        function formatJSON(json) {
+            var html = '';
+            for (var key in json) {
+                html += '<em>' + key + '</em> ' + json[key] + '<br>';
+            }
+            return html;
+        }
+
+        //三维浏览
+        function xyzView() {
+            xyz.init(document.querySelector('#map'));
+            xyz.load('indoor.svg');
+            xyz.translate(-200, -200, 100);
+            xyz.rotate(45, 0, 0);
+            xyz.render();
+        }
+
+
+        
+
+    </script>
+</body>
+</html>

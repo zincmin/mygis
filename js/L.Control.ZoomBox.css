@@ -1,0 +1,14 @@
+.leaflet-zoom-box-control {
+    font-size: 18px;
+ }
+
+.leaflet-zoom-box-control.active a {
+    background: url('images/zoom.png') no-repeat center center;
+}
+
+.leaflet-zoom-box-control a {
+    background: url('images/zoom.png') center center no-repeat;
+}
+.leaflet-zoom-box-crosshair {
+    cursor: crosshair !important;
+}
